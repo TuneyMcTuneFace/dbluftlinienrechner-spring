@@ -2,13 +2,18 @@ package com.bopp.dbrechner.api.v1.distance;
 
 import org.springframework.stereotype.Component;
 import com.bopp.dbrechner.DbrechnerApplication;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonFactoryBuilder;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.bean.CsvBindByPosition;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.io.OutputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -18,9 +23,10 @@ import java.util.HashMap;
 public final class LuftwegrechnerUtility {
 
     /**
-     * Diese Funktion initialisiert den Luftwegrechner durch das einlesen der gegebenen CSV
+     * Diese Funktion initialisiert den Luftwegrechner durch das einlesen der
+     * gegebenen CSV. Diese Funktion sollte am Start des Services ausgeführt werden.
      */
-    public static void init(){
+    public static void init() {
         LuftwegrechnerUtility.readCsv("./data/D_Bahnhof_2020_alle.CSV");
     }
 
@@ -49,6 +55,11 @@ public final class LuftwegrechnerUtility {
         public String Status;
     }
 
+    /**
+     * 
+     * @param filename
+     */
+    // TODO: JavaBean zum laufen -> Name, Breite, etc. via CSVToBean abfragen
     public static void readCsv(String filename) {
         URL csvUrl = DbrechnerApplication.class.getClassLoader().getResource(filename);
         HashMap<String, Bahnhof> ds100Map = new HashMap<String, Bahnhof>();
@@ -87,14 +98,13 @@ public final class LuftwegrechnerUtility {
         return n * (180 / Math.PI);
     }
 
-
     /**
      * 
      * @param b1
      * @param b2
      * @return {"unit": String, "distance": String}
-     * default unit: "km"
-     * Quelle https://de.martech.zone/calculate-great-circle-distance/
+     *         default unit: "km"
+     *         Quelle https://de.martech.zone/calculate-great-circle-distance/
      */
     public static HashMap<String, String> distanceBetweenPoints(Bahnhof b1, Bahnhof b2) {
         return distanceBetweenPoints(b1, b2, "km");
@@ -106,7 +116,7 @@ public final class LuftwegrechnerUtility {
      * @param b2
      * @param unit "km" oder "miles"
      * @return {"unit": String, "distance": String}
-     * Quelle https://de.martech.zone/calculate-great-circle-distance/
+     *         Quelle https://de.martech.zone/calculate-great-circle-distance/
      */
     public static HashMap<String, String> distanceBetweenPoints(Bahnhof b1, Bahnhof b2, String unit) {
         double theta = b1.getLongitude() - b2.getLongitude();
