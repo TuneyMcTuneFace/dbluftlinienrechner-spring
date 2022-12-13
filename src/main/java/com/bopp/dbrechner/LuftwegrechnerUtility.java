@@ -11,15 +11,20 @@ import com.opencsv.CSVReaderBuilder;
 import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
-
+import com.opencsv.exceptions.CsvException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 // Luftrechner 
 @Component
@@ -27,9 +32,11 @@ public final class LuftwegrechnerUtility {
     public static HashMap<String, Bahnhof> ds100HashMap = new HashMap<String, Bahnhof>();
 
     public static void readCsv() {
-        URL ioStream = LuftwegrechnerUtility.class.getClassLoader().getResource("./data/D_Bahnhof_2020_alle.CSV");
+        URL csvUrl = LuftwegrechnerUtility.class.getClassLoader().getResource("./data/D_Bahnhof_2020_alle.CSV");
+
         try {
-            
+           CSVParser parser = new CSVParserBuilder().withSeparator(';').build();
+           BufferedReader br = Files.newBufferedReader(csvUrl.getFile(), StandardCharsets.UTF_8);
         } catch (Exception e) {
             // TODO: handle exception
         }
@@ -47,6 +54,14 @@ public final class LuftwegrechnerUtility {
         return distanceBetweenPoints(b1, b2, "km");
     }
 
+    /**
+     * 
+     * @param b1
+     * @param b2
+     * @param unit "km" oder "miles"
+     * @return
+     * Quelle https://de.martech.zone/calculate-great-circle-distance/
+     */
     public static HashMap<String, String> distanceBetweenPoints(Bahnhof b1, Bahnhof b2, String unit) {
         double theta = b1.getLongitude() - b2.getLongitude();
         double distance = (Math.sin(toRad(b1.getLatitude())) *
