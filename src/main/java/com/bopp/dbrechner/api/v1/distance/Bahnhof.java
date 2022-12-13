@@ -1,12 +1,12 @@
-package com.bopp.dbrechner;
+package com.bopp.dbrechner.api.v1.distance;
 
 public class Bahnhof {
     private String ds100;
     private String name;
-    private double longitude;
-    private double latitude;
+    private float longitude;
+    private float latitude;
 
-    Bahnhof(String ds100, String name, double longitude, double latitude) {
+    Bahnhof(String ds100, String name, float longitude, float latitude) {
         setDs100(ds100);
         setName(name);
         setLongitude(longitude);
@@ -29,19 +29,19 @@ public class Bahnhof {
         this.name = name;
     }
 
-    public double getLatitude() {
+    public float getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(float latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
+    public float getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(float longitude) {
         this.longitude = longitude;
     }
 
