@@ -1,7 +1,6 @@
 package com.bopp.dbluftlinierechner.api.v1.distance;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.springframework.http.ResponseEntity;
@@ -16,11 +15,27 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 @RestController
 @RequestMapping("/api/v1/distance")
 public class DistanceController {
+
+    @GetMapping("/")
+    public ResponseEntity<JsonNode> root() {
+        ObjectNode response = new ObjectMapper().createObjectNode();
+        response.put("error", "Keine Bahnhöfe angegeben");
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @GetMapping("/{bahnhof}")
+    public ResponseEntity<JsonNode> einBahnhof() {
+        ObjectNode response = new ObjectMapper().createObjectNode();
+        response.put("error", "Nur ein Bahnhof angegeben.");
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    
     @GetMapping("/{bahnhof1}/{bahnhof2}")
     public ResponseEntity<JsonNode> calculateDistance(
             @PathVariable("bahnhof1") String b1,
             @PathVariable("bahnhof2") String b2) {
-                
+
         ObjectNode response = new ObjectMapper().createObjectNode();
 
         String regex = "^.{2,6}$";
@@ -57,19 +72,6 @@ public class DistanceController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{bahnhof}")
-    public ResponseEntity<JsonNode> einBahnhof() {
-        ObjectNode response = new ObjectMapper().createObjectNode();
-        response.put("error", "Nur ein Bahnhof angegeben");
-        return ResponseEntity.badRequest().body(response);
-    }
-
-    @GetMapping("/api/v1/distance/")
-    public ResponseEntity<JsonNode> distanceResponse() {
-        ObjectNode response = new ObjectMapper().createObjectNode();
-        response.put("error", "Keine Bahnhöfe angegeben");
-        return ResponseEntity.badRequest().body(response);
-    }
 
     // TODO Vielleicht hier eine API für einen CSV Hot-swap machen? Datei upload?
 }

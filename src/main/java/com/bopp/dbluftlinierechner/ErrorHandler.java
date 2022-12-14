@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class ErrorHandler implements ErrorController {
     @RequestMapping("/error")
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    ObjectNode defaultError() {
+    ObjectNode notfound() {
         ObjectNode response = new ObjectMapper().createObjectNode();
         response.put("error", "resource not found");
         return response;

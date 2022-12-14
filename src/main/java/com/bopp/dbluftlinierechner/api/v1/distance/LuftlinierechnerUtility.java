@@ -1,22 +1,18 @@
 package com.bopp.dbluftlinierechner.api.v1.distance;
 
-import org.apache.catalina.mapper.Mapper;
 import org.springframework.stereotype.Component;
-
 import com.bopp.dbluftlinierechner.Application;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
-import com.opencsv.bean.CsvBindByPosition;
 import java.io.BufferedReader;
-import java.io.FileReader;
-import java.net.URL;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 
-// Luftrechner 
+// Luftlinienrechner 
 @Component
 public final class LuftlinierechnerUtility {
 
@@ -24,9 +20,9 @@ public final class LuftlinierechnerUtility {
      * Diese Funktion initialisiert den Luftlinierechner durch das einlesen der
      * gegebenen CSV. Diese Funktion sollte am Start des Services ausgeführt werden.
      */
-    public static void init() {
+    public static void init(String csvFile) {
         try {
-            LuftlinierechnerUtility.readCsv("./data/D_Bahnhof_2020_alle.CSV");
+            LuftlinierechnerUtility.ds100HashMap = LuftlinierechnerUtility.readCsvToHashMap(csvFile);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -50,19 +46,24 @@ public final class LuftlinierechnerUtility {
      * }
      */
 
+     
+    // TODO: BahnhofBean -> Name, Breite, etc. via CSVToBean abfragen
     /**
-     * Liest die Angegebene CSV File
+     * Liest die Angegebene CSV File und gibt das Ergebnis in einer Hashmap aus.
      * 
      * @param filename
      */
-    // TODO: BahnhofBean -> Name, Breite, etc. via CSVToBean abfragen
-    public static void readCsv(String filename) throws Exception {
+    public static HashMap<String, Bahnhof> readCsvToHashMap(String filename) throws Exception {
 
-        URL csvUrl = Application.class.getClassLoader().getResource(filename);
+        InputStream inputStream = Application.class.getResourceAsStream(filename);
+        if (inputStream == null)
+            throw new Exception(String.format("File %s nicht findbar", filename));
+
         HashMap<String, Bahnhof> ds100Map = new HashMap<String, Bahnhof>();
 
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(csvUrl.getFile(), Charset.forName("UTF-8")));
+            InputStreamReader isr = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
+            BufferedReader reader = new BufferedReader(isr);
             CSVParser csvParser = new CSVParserBuilder().withSeparator(';').build();
             CSVReader csvReader = new CSVReaderBuilder(reader).withCSVParser(csvParser).build();
             String[] line;
@@ -87,18 +88,19 @@ public final class LuftlinierechnerUtility {
                     String ds100Code = line[1];
                     String[] ds100Split = ds100Code.split(",");
                     String name = line[3];
+                    Bahnhof b = new Bahnhof(ds100Split[0], name, longitude, latitude);
                     for (String ds100 : ds100Split) {
-                        Bahnhof b = new Bahnhof(ds100, name, longitude, latitude);
                         ds100Map.put(ds100, b);
                     }
                 }
             }
-            LuftlinierechnerUtility.ds100HashMap = ds100Map;
             reader.close();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw e;
         }
+
+        return ds100Map;
     }
 
     /**
@@ -136,7 +138,7 @@ public final class LuftlinierechnerUtility {
      * @param b2
      * @param unit "km" oder "miles"
      * @return {"unit": String, "distance": String}
-     * @implNote Quelle: https://de.martech.zone/calculate-great-circle-distance/
+     *         Quelle: https://de.martech.zone/calculate-great-circle-distance/
      */
     public static HashMap<String, String> distanceBetweenPoints(Bahnhof b1, Bahnhof b2, String unit) {
         double theta = b1.getLongitude() - b2.getLongitude();
@@ -149,15 +151,17 @@ public final class LuftlinierechnerUtility {
         distance = Math.acos(distance);
         distance = toDeg(distance);
         distance = distance * 60 * 1.1515;
+
         switch (unit) {
             case "miles":
                 break;
             case "km":
-                distance = distance * 1.609344;
+                distance *= 1.609344;
                 break;
             default:
                 return null;
         }
+
         HashMap<String, String> d = new HashMap<String, String>();
         d.put("unit", unit);
         d.put("distance", Integer.toString((int) Math.round(distance)));
