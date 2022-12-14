@@ -88,8 +88,8 @@ public final class LuftlinierechnerUtility {
                     String ds100Code = line[1];
                     String[] ds100Split = ds100Code.split(",");
                     String name = line[3];
-                    Bahnhof b = new Bahnhof(ds100Split[0], name, longitude, latitude);
                     for (String ds100 : ds100Split) {
+                        Bahnhof b = new Bahnhof(ds100, name, longitude, latitude);
                         ds100Map.put(ds100, b);
                     }
                 }
