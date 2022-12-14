@@ -1,4 +1,4 @@
-package com.bopp.dbrechner.api.v1.distance;
+package com.bopp.dbluftlinierechner.api.v1.distance;
 
 public class Bahnhof {
     private String ds100;

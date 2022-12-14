@@ -1,38 +1,37 @@
-package com.bopp.dbrechner.api.v1.distance;
+package com.bopp.dbluftlinierechner.api.v1.distance;
 
+import org.apache.catalina.mapper.Mapper;
 import org.springframework.stereotype.Component;
-import com.bopp.dbrechner.DbrechnerApplication;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonFactoryBuilder;
-import com.fasterxml.jackson.databind.util.JSONPObject;
+
+import com.bopp.dbluftlinierechner.Application;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.bean.CsvBindByPosition;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
-import java.io.OutputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 
 // Luftrechner 
 @Component
-public final class LuftwegrechnerUtility {
+public final class LuftlinierechnerUtility {
 
     /**
-     * Diese Funktion initialisiert den Luftwegrechner durch das einlesen der
+     * Diese Funktion initialisiert den Luftlinierechner durch das einlesen der
      * gegebenen CSV. Diese Funktion sollte am Start des Services ausgeführt werden.
      */
     public static void init() {
-        LuftwegrechnerUtility.readCsv("./data/D_Bahnhof_2020_alle.CSV");
+        LuftlinierechnerUtility.readCsv("./data/D_Bahnhof_2020_alle.CSV");
     }
 
     public static HashMap<String, Bahnhof> ds100HashMap = new HashMap<String, Bahnhof>();
 
-    public class BahnhofBean {
+    // TODO: BahnhofBean via CSVtoBean möglich machen
+    /*public class BahnhofBean {
         @CsvBindByPosition(position = 0)
         public String EVA_NR;
         @CsvBindByPosition(position = 1)
@@ -53,15 +52,15 @@ public final class LuftwegrechnerUtility {
         public String Betreiber_Nr;
         @CsvBindByPosition(position = 9)
         public String Status;
-    }
+    }*/
 
     /**
-     * 
+     * Liest die Angegebene CSV File
      * @param filename
      */
-    // TODO: JavaBean zum laufen -> Name, Breite, etc. via CSVToBean abfragen
+    // TODO: BahnhofBean -> Name, Breite, etc. via CSVToBean abfragen
     public static void readCsv(String filename) {
-        URL csvUrl = DbrechnerApplication.class.getClassLoader().getResource(filename);
+        URL csvUrl = Application.class.getClassLoader().getResource(filename);
         HashMap<String, Bahnhof> ds100Map = new HashMap<String, Bahnhof>();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(csvUrl.getFile(), Charset.forName("UTF-8")));
@@ -82,7 +81,7 @@ public final class LuftwegrechnerUtility {
                     }
                 }
             }
-            LuftwegrechnerUtility.ds100HashMap = ds100Map;
+            LuftlinierechnerUtility.ds100HashMap = ds100Map;
             reader.close();
 
         } catch (Exception e) {

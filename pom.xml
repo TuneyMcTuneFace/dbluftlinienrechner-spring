@@ -9,9 +9,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.bopp</groupId>
-	<artifactId>dbrechner</artifactId>
+	<artifactId>dbluftlinierechner</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>dbrechner</name>
+	<name>dbluftlinierechner</name>
 	<description>Luftlinienrechner zwischen zwei Bahnhöfen</description>
 	<properties>
 		<java.version>17</java.version>
