@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bopp.dbluftlinierechner.api.v1.distance.bean.Bahnhof;
 import com.bopp.dbluftlinierechner.api.v1.distance.bean.Distance;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,13 +62,16 @@ public class DistanceController {
             response.put("error", "Selber Bahnhof");
             return ResponseEntity.badRequest().body(response);
         }
+        
 
         Distance d = LuftlinierechnerUtility.distanceBetweenPoints(bh1, bh2);
 
         response.put("from", bh1.getName());
         response.put("to", bh2.getName());
-        response.put("distance", (int) d.getDistance());
+        response.put("distance", Math.round(d.getDistance()));
         response.put("unit", d.getUnit());
+        response.put("ds100_1", bh1.getDs100());
+        response.put("ds100_2", bh2.getDs100());
 
         return ResponseEntity.ok(response);
     }

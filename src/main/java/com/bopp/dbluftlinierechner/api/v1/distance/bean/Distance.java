@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 @Data
 @AllArgsConstructor
-/** */
 public class Distance {
     private double distance;
     private String unit;

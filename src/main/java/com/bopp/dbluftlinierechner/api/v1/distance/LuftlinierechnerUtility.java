@@ -2,7 +2,7 @@ package com.bopp.dbluftlinierechner.api.v1.distance;
 
 import org.springframework.stereotype.Component;
 import com.bopp.dbluftlinierechner.Application;
-import com.bopp.dbluftlinierechner.api.v1.distance.bean.CSVBahnhof;
+import com.bopp.dbluftlinierechner.api.v1.distance.bean.Bahnhof;
 import com.bopp.dbluftlinierechner.api.v1.distance.bean.Distance;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -43,32 +43,29 @@ public final class LuftlinierechnerUtility {
      */
     public static HashMap<String, Bahnhof> readCsvToHashMap(String filename) throws Exception {
 
+        HashMap<String, Bahnhof> ds100Map = new HashMap<String, Bahnhof>();
+
+
         InputStream inputStream = Application.class.getResourceAsStream(filename);
         if (inputStream == null)
             throw new Exception(String.format("File %s nicht findbar", filename));
 
-        HashMap<String, Bahnhof> ds100Map = new HashMap<String, Bahnhof>();
 
         try {
             InputStreamReader isr = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
             BufferedReader reader = new BufferedReader(isr);
-            CsvToBean<CSVBahnhof> csvToBean = new CsvToBeanBuilder<CSVBahnhof>(reader)
-                    .withType(CSVBahnhof.class)
+            CsvToBean<Bahnhof> csvToBean = new CsvToBeanBuilder<Bahnhof>(reader)
+                    .withType(Bahnhof.class)
                     .withSeparator(';')
                     .build();
 
-            Iterator<CSVBahnhof> beanIterator = csvToBean.iterator();
+            Iterator<Bahnhof> beanIterator = csvToBean.iterator();
 
             while (beanIterator.hasNext()) {
-                CSVBahnhof bh = beanIterator.next();
-                if (bh.getVerkehr().equals("FV")) {
-                    
-                    float longitude = Float.parseFloat(bh.getLaenge().replace(',', '.'));
-                    float latitude = Float.parseFloat(bh.getBreite().replace(',', '.'));
-
-                    // Wenn mehrere DS100 Codes in einem Wert sind
-                    for (String ds100 : bh.getDS100().split(",")) {
-                        Bahnhof b = new Bahnhof(ds100, bh.getNAME(), longitude, latitude);
+                Bahnhof b = beanIterator.next();
+                if (b.getVerkehr().equals("FV")) { // Filter alle non-Fernverkehr Bahnhöfe aus
+                    // Für mehrere DS100 Codes in einem Wert
+                    for (String ds100 : b.getDs100().split(",")) {
                         ds100Map.put(ds100, b);
                     }
                 }
