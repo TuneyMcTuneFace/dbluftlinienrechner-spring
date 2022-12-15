@@ -6,15 +6,20 @@ import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.List;
 
 // Luftlinienrechner 
 /**
- * Diese Utility-Klasse beinhaltet die Hashmap für die DS100 Codes und liest die CSVFile ein.
+ * Diese Utility-Klasse beinhaltet die Hashmap für die DS100 Codes und liest die
+ * CSVFile ein.
  * Darüberhinaus ist dort die Methode für die Rechnung der Luftlinie.
  */
 @Component
@@ -35,22 +40,20 @@ public final class LuftlinierechnerUtility {
     public static HashMap<String, Bahnhof> ds100HashMap = new HashMap<String, Bahnhof>();
 
     // TODO: BahnhofBean via CSVtoBean möglich machen
-    /*
-     * public class BahnhofBean {
-     * public String EVA_NR;
-     * public String DS100;
-     * public String IFOPT;
-     * public String NAME;
-     * public String Verkehr;
-     * public String Laenge;
-     * public String Breite;
-     * public String Betreiber_Name;
-     * public String Betreiber_Nr;
-     * public String Status;
-     * }
-     */
 
-     
+    public class BahnhofBean {
+        public String EVA_NR;
+        public String DS100;
+        public String IFOPT;
+        public String NAME;
+        public String Verkehr;
+        public String Laenge;
+        public String Breite;
+        public String Betreiber_Name;
+        public String Betreiber_Nr;
+        public String Status;
+    }
+
     // TODO: BahnhofBean -> Name, Breite, etc. via CSVToBean abfragen
     /**
      * Liest die Angegebene CSV File und gibt das Ergebnis in einer Hashmap aus.
@@ -70,6 +73,12 @@ public final class LuftlinierechnerUtility {
             BufferedReader reader = new BufferedReader(isr);
             CSVParser csvParser = new CSVParserBuilder().withSeparator(';').build();
             CSVReader csvReader = new CSVReaderBuilder(reader).withCSVParser(csvParser).build();
+            CsvToBean<BahnhofBean> csvBeanReader = new CsvToBeanBuilder(reader)
+            .withType(BahnhofBean.class)
+            .withSeparator(';')
+            .build();
+            List<BahnhofBean> results = csvBeanReader.parse();
+            System.out.println(results.size());
             String[] line;
 
             // Checke Positionen der Columnheader
@@ -108,7 +117,8 @@ public final class LuftlinierechnerUtility {
     }
 
     /**
-     * Konvertiert Grad zu Bogenmaß 
+     * Konvertiert Grad zu Bogenmaß
+     * 
      * @param n Grad
      * @return
      */
@@ -118,6 +128,7 @@ public final class LuftlinierechnerUtility {
 
     /**
      * Konvertiert Bogenmaß zu Grad
+     * 
      * @param n
      * @return
      */

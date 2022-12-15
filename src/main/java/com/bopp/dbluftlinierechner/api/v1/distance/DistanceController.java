@@ -40,17 +40,17 @@ public class DistanceController {
 
         String regex = "^.{2,6}$";
         if (!Pattern.matches(regex, b1) || !Pattern.matches(regex, b2)) {
-            response.put("error", "Parameter ausserhalb der definition");
+            response.put("error", "Parameter ausserhalb der Definition");
             return ResponseEntity.badRequest().body(response);
         }
 
         if (!LuftlinierechnerUtility.ds100HashMap.containsKey(b1)) {
-            response.put("error", "Value 1 nicht da");
+            response.put("error", "Parameter 1 nicht da");
             return ResponseEntity.badRequest().body(response);
         }
         
         if (!LuftlinierechnerUtility.ds100HashMap.containsKey(b2)) {
-            response.put("error", "Value 2 nicht da");
+            response.put("error", "Parameter 2 nicht da");
             return ResponseEntity.badRequest().body(response);
         }
 
