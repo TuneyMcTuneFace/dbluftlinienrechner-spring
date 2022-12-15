@@ -57,7 +57,7 @@ public class DistanceController {
 
         Bahnhof bh1 = LuftlinierechnerUtility.ds100HashMap.get(b1);
         Bahnhof bh2 = LuftlinierechnerUtility.ds100HashMap.get(b2);
-
+        
         if (bh1.getName() == bh2.getName()) {
             response.put("error", "Selber Bahnhof");
             return ResponseEntity.badRequest().body(response);

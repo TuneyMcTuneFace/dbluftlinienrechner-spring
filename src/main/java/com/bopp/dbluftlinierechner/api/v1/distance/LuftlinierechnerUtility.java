@@ -122,11 +122,15 @@ public final class LuftlinierechnerUtility {
      */
     public static Distance distanceBetweenPoints(Bahnhof b1, Bahnhof b2, String unit) {
         double theta = b1.getLongitude() - b2.getLongitude();
-        double distance = (Math.sin(toRad(b1.getLatitude())) *
-                Math.sin(toRad(b2.getLatitude())))
-                + (Math.cos(toRad(b1.getLatitude())) *
-                        Math.cos(toRad(b2.getLatitude()))) *
-                        Math.cos(toRad(theta));
+        double distance = (
+            Math.sin(toRad(b1.getLatitude())) *
+            Math.sin(toRad(b2.getLatitude()))
+            ) + 
+            (
+            Math.cos(toRad(b1.getLatitude())) *
+            Math.cos(toRad(b2.getLatitude()))
+            ) *
+            Math.cos(toRad(theta));
 
         distance = Math.acos(distance);
         distance = toDeg(distance);
