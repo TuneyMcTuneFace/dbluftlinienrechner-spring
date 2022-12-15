@@ -1,6 +1,5 @@
 package com.bopp.dbluftlinierechner.api.v1.distance;
 
-import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import org.springframework.http.ResponseEntity;
@@ -8,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.bopp.dbluftlinierechner.api.v1.distance.bean.Distance;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -30,7 +31,6 @@ public class DistanceController {
         return ResponseEntity.badRequest().body(response);
     }
 
-    
     @GetMapping("/{bahnhof1}/{bahnhof2}")
     public ResponseEntity<JsonNode> calculateDistance(
             @PathVariable("bahnhof1") String b1,
@@ -48,7 +48,7 @@ public class DistanceController {
             response.put("error", "Parameter 1 nicht da");
             return ResponseEntity.badRequest().body(response);
         }
-        
+
         if (!LuftlinierechnerUtility.ds100HashMap.containsKey(b2)) {
             response.put("error", "Parameter 2 nicht da");
             return ResponseEntity.badRequest().body(response);
@@ -62,16 +62,13 @@ public class DistanceController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        HashMap<String, String> d = LuftlinierechnerUtility.distanceBetweenPoints(bh1, bh2);
+        Distance d = LuftlinierechnerUtility.distanceBetweenPoints(bh1, bh2);
 
         response.put("from", bh1.getName());
         response.put("to", bh2.getName());
-        response.put("distance", Integer.parseInt(d.get("distance")));
-        response.put("unit", d.get("unit"));
+        response.put("distance", (int) d.getDistance());
+        response.put("unit", d.getUnit());
 
         return ResponseEntity.ok(response);
     }
-
-
-    // TODO Vielleicht hier eine API für einen CSV Hot-swap machen? Datei upload?
 }

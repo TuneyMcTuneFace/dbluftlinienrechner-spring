@@ -1,5 +1,10 @@
 package com.bopp.dbluftlinierechner.api.v1.distance;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class Bahnhof {
     private String ds100;
     private String name;
@@ -12,37 +17,4 @@ public class Bahnhof {
         setLongitude(longitude);
         setLatitude(latitude);
     }
-
-    public String getDs100() {
-        return ds100;
-    }
-
-    public void setDs100(String ds100) {
-        this.ds100 = ds100;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public float getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(float latitude) {
-        this.latitude = latitude;
-    }
-
-    public float getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(float longitude) {
-        this.longitude = longitude;
-    }
-
 }
