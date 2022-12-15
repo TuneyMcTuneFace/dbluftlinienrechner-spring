@@ -8,7 +8,7 @@ import com.bopp.dbluftlinierechner.api.v1.distance.LuftlinierechnerUtility;
 @SpringBootApplication
 public class Application {
 	public static void main(String[] args) {
-		LuftlinierechnerUtility.init("/data/D_Bahnhof_2020_alle.CSV"); // Liest aus dem resources Ordner heraus
+		LuftlinierechnerUtility.init("/data/D_Bahnhof_2020_alle.CSV"); // Liest die CSV aus dem resources Ordner heraus
 		SpringApplication.run(Application.class, args);
 	}
 }

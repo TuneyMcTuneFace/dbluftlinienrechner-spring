@@ -13,6 +13,10 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 
 // Luftlinienrechner 
+/**
+ * Diese Utility-Klasse beinhaltet die Hashmap für die DS100 Codes und liest die CSVFile ein.
+ * Darüberhinaus ist dort die Methode für die Rechnung der Luftlinie.
+ */
 @Component
 public final class LuftlinierechnerUtility {
 
@@ -104,8 +108,7 @@ public final class LuftlinierechnerUtility {
     }
 
     /**
-     * Konvertiert Grad zu Bogenmaß
-     * 
+     * Konvertiert Grad zu Bogenmaß 
      * @param n Grad
      * @return
      */
@@ -113,8 +116,10 @@ public final class LuftlinierechnerUtility {
         return n * (Math.PI / 180);
     }
 
-    /*
+    /**
      * Konvertiert Bogenmaß zu Grad
+     * @param n
+     * @return
      */
     public static double toDeg(double n) {
         return n * (180 / Math.PI);

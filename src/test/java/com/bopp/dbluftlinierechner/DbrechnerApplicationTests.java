@@ -9,5 +9,4 @@ class DbrechnerApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
