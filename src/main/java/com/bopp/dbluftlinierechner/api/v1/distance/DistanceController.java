@@ -63,15 +63,12 @@ public class DistanceController {
             return ResponseEntity.badRequest().body(response);
         }
         
-
         Distance d = LuftlinierechnerUtility.distanceBetweenPoints(bh1, bh2);
 
         response.put("from", bh1.getName());
         response.put("to", bh2.getName());
         response.put("distance", Math.round(d.getDistance()));
         response.put("unit", d.getUnit());
-        response.put("ds100_1", bh1.getDs100());
-        response.put("ds100_2", bh2.getDs100());
 
         return ResponseEntity.ok(response);
     }

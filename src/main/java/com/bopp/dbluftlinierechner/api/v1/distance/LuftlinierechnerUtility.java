@@ -66,6 +66,7 @@ public final class LuftlinierechnerUtility {
                 if (b.getVerkehr().equals("FV")) { // Filter alle non-Fernverkehr Bahnhöfe aus
                     // Für mehrere DS100 Codes in einem Wert
                     for (String ds100 : b.getDs100().split(",")) {
+                        
                         ds100Map.put(ds100, b);
                     }
                 }
@@ -120,6 +121,7 @@ public final class LuftlinierechnerUtility {
      *         Quelle: https://de.martech.zone/calculate-great-circle-distance/
      */
     public static Distance distanceBetweenPoints(Bahnhof b1, Bahnhof b2, String unit) {
+        System.out.println(b1.toString());
         double theta = b1.getLongitude() - b2.getLongitude();
         double distance = (Math.sin(toRad(b1.getLatitude())) *
                 Math.sin(toRad(b2.getLatitude())))

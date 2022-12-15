@@ -1,6 +1,8 @@
 package com.bopp.dbluftlinierechner.api.v1.distance.bean;
 
 import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvNumber;
+
 import lombok.Data;
 
 @Data
@@ -12,10 +14,12 @@ public class Bahnhof {
     @CsvBindByName(column = "NAME")
     private String name;
     
-    @CsvBindByName(column = "Laenge", locale = "de_DE")
+    @CsvBindByName(column = "Laenge", locale = "de-DE")
+    @CsvNumber("0.0")
     private Float longitude;
     
-    @CsvBindByName(column = "Breite", locale = "de_DE" )
+    @CsvBindByName(column = "Breite", locale = "de-DE" )
+    @CsvNumber("0.0")
     private Float latitude;
     
     @CsvBindByName(column = "Verkehr")
