@@ -22,6 +22,8 @@ import java.util.Iterator;
 @Component
 public final class LuftlinierechnerUtility {
 
+    public static HashMap<String, Bahnhof> ds100HashMap = new HashMap<String, Bahnhof>();
+
     /**
      * Diese Funktion initialisiert den Luftlinierechner durch das einlesen der
      * gegebenen CSV. Diese Funktion sollte am Start des Services ausgeführt werden.
@@ -34,7 +36,6 @@ public final class LuftlinierechnerUtility {
         }
     }
 
-    public static HashMap<String, Bahnhof> ds100HashMap = new HashMap<String, Bahnhof>();
 
     /**
      * Liest die Angegebene CSV File und gibt das Ergebnis in einer Hashmap aus.
@@ -44,12 +45,10 @@ public final class LuftlinierechnerUtility {
     public static HashMap<String, Bahnhof> readCsvToHashMap(String filename) throws Exception {
 
         HashMap<String, Bahnhof> ds100Map = new HashMap<String, Bahnhof>();
-
-
+        
         InputStream inputStream = Application.class.getResourceAsStream(filename);
         if (inputStream == null)
             throw new Exception(String.format("File %s nicht findbar", filename));
-
 
         try {
             InputStreamReader isr = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
@@ -60,10 +59,10 @@ public final class LuftlinierechnerUtility {
                     .build();
 
             Iterator<Bahnhof> beanIterator = csvToBean.iterator();
-
             while (beanIterator.hasNext()) {
                 Bahnhof b = beanIterator.next();
-                if (b.getVerkehr().equals("FV")) { // Filter alle non-Fernverkehr Bahnhöfe aus
+                // Filter alle non-Fernverkehr Bahnhöfe raus
+                if (b.getVerkehr().equals("FV")) { 
                     // Für mehrere DS100 Codes in einem Wert
                     for (String ds100 : b.getDs100().split(",")) {
                         
