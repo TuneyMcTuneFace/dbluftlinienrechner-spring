@@ -62,7 +62,7 @@ public class DistanceController {
             response.put("error", "Selber Bahnhof");
             return ResponseEntity.badRequest().body(response);
         }
-        
+
         Distance d = LuftlinierechnerUtility.distanceBetweenPoints(bh1, bh2);
 
         response.put("from", bh1.getName());
