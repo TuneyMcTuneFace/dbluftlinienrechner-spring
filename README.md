@@ -8,3 +8,6 @@ Diese API Kalkuliert die Luftlinie zwischen 2 angegebenen Bahnhöfen, welche von
 
 - SpringBoot 
 - Java17
+
+### RUN
+`./mvnw spring-boot:run`

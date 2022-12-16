@@ -65,7 +65,6 @@ public final class LuftlinierechnerUtility {
                 if (b.getVerkehr().equals("FV")) { 
                     // Für mehrere DS100 Codes in einem Wert
                     for (String ds100 : b.getDs100().split(",")) {
-                        
                         ds100Map.put(ds100, b);
                     }
                 }
